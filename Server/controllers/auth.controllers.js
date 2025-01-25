@@ -149,11 +149,10 @@ export const forgotPassword = async (req, res) => {
     }}
 
 export const resetPassword = async (req, res) => {
-        const { token, password } = req.body;
         try {
             const {token} = req.params;
             const {password} = req.body;
-
+            
             const user = await User.findOne({
                 resetPasswordToken: token,
                 resetPasswordExpiresAt: { $gt: Date.now() },
@@ -166,12 +165,14 @@ export const resetPassword = async (req, res) => {
 
             //Update Password
             const hashedPassword = await bcrypt.hash(password, 10);
+            
             user.password = hashedPassword;
             user.resetPasswordToken = undefined;
+            user.resetPasswordExpiresAt = undefined;
 
             await user.save();
 
-            await sendPasswordResetSuccessEmail({success:true, message:"Password reset successful"});
+            await sendPasswordResetSuccessEmail(user.email);
 
             res.status(200).json({success:true, message:"Password reset successful"});
         } catch (error) {

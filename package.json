@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "server/index.js",
   "scripts": {
-    "dev": "nodemon server/index.js"
+    "dev": "cross-env NODE_ENV=development nodemon Server/index.js",
+    "start": "cross-env NODE_ENV=production node Server/index.js",
+    "build": "cross-env npm install && npm install --prefix Client && npm run build --prefix Client"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +17,7 @@
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
